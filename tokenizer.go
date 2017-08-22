@@ -26,7 +26,7 @@ func NewSegoTokenizer(host string) (*SegoTokenizer, error) {
 }
 
 func (this *SegoTokenizer) Tokenize(b []byte) (stream analysis.TokenStream) {
-    stream = make(analysis.TokenStream, 0)
+	stream = make(analysis.TokenStream, 0)
 	var form = url.Values{}
 	form.Add("data", string(b))
 	var url = fmt.Sprintf("http://%s/api/tokenizer/", this.host)
