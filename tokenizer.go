@@ -15,6 +15,8 @@ const (
 	Name = "sego"
 )
 
+var DefaultSegoTokenizerHost = "localhost:3000"
+
 type SegoTokenizer struct {
 	host string
 }
@@ -55,7 +57,7 @@ func (this *SegoTokenizer) Tokenize(b []byte) (stream analysis.TokenStream) {
 func SegoTokenizerConstructor(config map[string]interface{}, cache *registry.Cache) (analysis.Tokenizer, error) {
 	host, ok := config["host"].(string)
 	if !ok {
-		return nil, fmt.Errorf("tokenizer host required")
+		host = DefaultSegoTokenizerHost
 	}
 
 	return NewSegoTokenizer(host)
