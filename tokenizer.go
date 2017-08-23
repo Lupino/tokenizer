@@ -15,21 +15,19 @@ const (
 	Name = "sego"
 )
 
-var DefaultSegoTokenizerHost = "localhost:3000"
+var SegoTokenizerHost = "localhost:3000"
 
-type SegoTokenizer struct {
-	host string
-}
+type SegoTokenizer struct{}
 
-func NewSegoTokenizer(host string) (*SegoTokenizer, error) {
-	return &SegoTokenizer{host: host}, nil
+func NewSegoTokenizer() (*SegoTokenizer, error) {
+	return &SegoTokenizer{}, nil
 }
 
 func (this *SegoTokenizer) Tokenize(b []byte) (stream analysis.TokenStream) {
 	stream = make(analysis.TokenStream, 0)
 	var form = url.Values{}
 	form.Add("data", string(b))
-	var url = fmt.Sprintf("http://%s/api/tokenizer/", this.host)
+	var url = fmt.Sprintf("http://%s/api/tokenizer/", SegoTokenizerHost)
 
 	var req, _ = http.NewRequest("POST", url, strings.NewReader(form.Encode()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
@@ -55,12 +53,7 @@ func (this *SegoTokenizer) Tokenize(b []byte) (stream analysis.TokenStream) {
 }
 
 func SegoTokenizerConstructor(config map[string]interface{}, cache *registry.Cache) (analysis.Tokenizer, error) {
-	host, ok := config["host"].(string)
-	if !ok {
-		host = DefaultSegoTokenizerHost
-	}
-
-	return NewSegoTokenizer(host)
+	return NewSegoTokenizer()
 }
 
 func init() {
